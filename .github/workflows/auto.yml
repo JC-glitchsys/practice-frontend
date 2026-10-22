@@ -1,0 +1,39 @@
+
+name: Daily Project Log
+
+on:
+  schedule:
+    - cron: "0 13 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-log:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Git identity
+        run: |
+          git config user.name "JC-glitchsys"
+          git config user.email "caris.jm672@s.msumain.edu.ph"
+
+      - name: Update daily log
+        run: |
+          DATE=$(TZ=Asia/Manila date +'%Y-%m-%d')
+          printf 'Last updated: %s\n' "$DATE" > log.txt
+
+      - name: Commit changes if needed
+        run: |
+          if git diff --quiet -- log.txt; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git add log.txt
+          git commit -m "docs: update daily project log"
+          git push
