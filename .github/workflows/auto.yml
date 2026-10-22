@@ -1,3 +1,4 @@
+
 name: Daily Project Log
 
 on:
@@ -19,7 +20,7 @@ jobs:
       - name: Set up Git identity
         run: |
           git config user.name "JC-glitchsys"
-          git config user.email "caris.jm672@s.msumain.edu.ph"
+          git config user.email "YOUR_GITHUB_EMAIL"
 
       - name: Update daily log
         run: |
@@ -28,11 +29,12 @@ jobs:
 
       - name: Commit changes if needed
         run: |
-          if git diff --quiet -- log.txt; then
+          git add log.txt
+
+          if git diff --cached --quiet; then
             echo "No changes to commit."
             exit 0
           fi
 
-          git add log.txt
           git commit -m "docs: update daily project log"
           git push
